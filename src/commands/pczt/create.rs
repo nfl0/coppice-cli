@@ -1,5 +1,5 @@
 #![allow(deprecated)]
-use std::{num::NonZeroUsize, path::PathBuf, str::FromStr};
+use std::{num::{NonZeroU32, NonZeroUsize}, path::PathBuf, str::FromStr};
 
 use anyhow::anyhow;
 use clap::Args;
@@ -113,7 +113,7 @@ impl Command {
             &input_selector,
             &change_strategy,
             request,
-            ConfirmationsPolicy::default(),
+            ConfirmationsPolicy::new_symmetrical(NonZeroU32::new(1).expect("one is nonzero"), true),
             // Preserve the pre-upgrade behavior: transfers never spend
             // transparent UTXOs; they must be shielded first.
             &SpendPolicy::default(),

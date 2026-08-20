@@ -1,4 +1,4 @@
-use std::{path::PathBuf, str::FromStr};
+use std::{num::NonZeroU32, path::PathBuf, str::FromStr};
 
 use anyhow::anyhow;
 use clap::Args;
@@ -93,7 +93,7 @@ impl Command {
             recipient,
             memo,
             mode,
-            ConfirmationsPolicy::default(),
+            ConfirmationsPolicy::new_symmetrical(NonZeroU32::new(1).expect("one is nonzero"), true),
             &LockedInputPolicy::Exclude,
             None,
         )
@@ -107,7 +107,7 @@ impl Command {
             &proposal,
             // Use the builder-derived expiry and a standard Orchard-pool bundle.
             None,
-            zcash_primitives::transaction::builder::BundlePadding::DEFAULT,
+            zcash_primitives::transaction::builder::BundlePadding::UNPADDED,
         )
         .map_err(error::Error::from)?;
 
